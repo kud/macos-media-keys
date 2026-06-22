@@ -1,0 +1,46 @@
+{
+  "name": "@kud/macos-media-keys",
+  "version": "0.1.0",
+  "description": "Send macOS system media keys (play/pause, next, previous, fast-forward, rewind) from Node",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kud/macos-media-keys.git"
+  },
+  "keywords": [
+    "macos",
+    "media-keys",
+    "media-control",
+    "play-pause",
+    "now-playing"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "native/media-key.swift"
+  ],
+  "os": [
+    "darwin"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "26.0.0",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.9"
+  }
+}
