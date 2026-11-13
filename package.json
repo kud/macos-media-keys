@@ -8,6 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/kud/macos-media-keys.git"
   },
+  "homepage": "https://kud.io/projects/macos-media-keys",
   "keywords": [
     "macos",
     "media-keys",
