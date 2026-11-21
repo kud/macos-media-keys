@@ -1,6 +1,6 @@
 {
   "name": "@kud/macos-media-keys",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Send macOS system media keys (play/pause, next, previous, fast-forward, rewind) from Node",
   "type": "module",
   "license": "MIT",
