@@ -36,7 +36,7 @@ The package is ESM only.
 
 ### How the helper is built
 
-The package ships `native/media-key.swift` as source. The first call to `sendMediaKey` compiles it with `swiftc -O` into the system temporary directory (`<os.tmpdir()>/macos-media-keys/`), and later calls reuse that binary. If the temporary directory is cleared, the next call rebuilds it. If `swiftc` is missing, the first call rejects with the compiler's error.
+The package ships `native/media-key.swift` as source. The first call to `sendMediaKey` compiles it with `swiftc -O` into the system temporary directory (`<os.tmpdir()>/macos-media-keys/`), under a name keyed on a hash of the Swift source, and later calls reuse that binary. An upgrade that changes the source therefore rebuilds the helper once on its first call. If the temporary directory is cleared, the next call rebuilds it. If `swiftc` is missing, the first call rejects with the compiler's error.
 
 ## Usage
 

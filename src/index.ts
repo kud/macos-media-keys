@@ -1,10 +1,11 @@
 import { execFile } from "node:child_process"
 import { existsSync } from "node:fs"
-import { mkdir } from "node:fs/promises"
+import { mkdir, readFile, rename, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { promisify } from "node:util"
+import { helperBinaryPath } from "./cache.js"
 
 const exec = promisify(execFile)
 
@@ -13,12 +14,21 @@ export type MediaKey = "play" | "next" | "previous" | "forward" | "rewind"
 const sourcePath = fileURLToPath(
   new URL("../native/media-key.swift", import.meta.url),
 )
-const binaryPath = join(tmpdir(), "macos-media-keys", "media-key")
+const cacheDir = join(tmpdir(), "macos-media-keys")
 
 const ensureBinary = async (): Promise<string> => {
+  const binaryPath = helperBinaryPath(cacheDir, await readFile(sourcePath))
   if (existsSync(binaryPath)) return binaryPath
   await mkdir(dirname(binaryPath), { recursive: true })
-  await exec("swiftc", ["-O", sourcePath, "-o", binaryPath])
+  // Compile to a private path, then rename atomically, so concurrent callers
+  // never execute a half-written binary.
+  const partialPath = `${binaryPath}.${process.pid}.tmp`
+  try {
+    await exec("swiftc", ["-O", sourcePath, "-o", partialPath])
+    await rename(partialPath, binaryPath)
+  } finally {
+    await rm(partialPath, { force: true })
+  }
   return binaryPath
 }
 
